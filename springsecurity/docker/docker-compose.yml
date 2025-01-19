@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql      # Imagem oficial do MySQL
+    #container_name: mysql_container
+    #restart: always        # Reinicia o serviço automaticamente em caso de falha
+    environment:
+      MYSQL_ROOT_PASSWORD: 123  # Senha para o usuário root
+      MYSQL_DATABASE: mydb          # Nome do banco de dados inicial
+      MYSQL_USER: admin            # Usuário adicional
+      MYSQL_PASSWORD: 123        # Senha do usuário adicional
+    ports:
+      - "3306:3306"        # Mapeia a porta 3306 do contêiner para a porta 3306 do host
+    #volumes:
+      #- db_data:/var/lib/mysql # Volume para persistência de dados
