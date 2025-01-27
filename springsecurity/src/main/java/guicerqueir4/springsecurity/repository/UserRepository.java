@@ -1,5 +1,6 @@
 package guicerqueir4.springsecurity.repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,5 +10,7 @@ import guicerqueir4.springsecurity.entities.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
+
+	Optional<User> findByUserName(String userName);
 
 }
