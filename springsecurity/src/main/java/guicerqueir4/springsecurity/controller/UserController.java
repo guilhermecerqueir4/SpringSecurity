@@ -1,10 +1,13 @@
 package guicerqueir4.springsecurity.controller;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +36,7 @@ public class UserController {
 	}
 	
 	
-	@PostMapping("/users")
+	@PostMapping("/users") //Endpoint para criação de novo Usuário
 	@Transactional
 	public ResponseEntity<Void> newUser(@RequestBody CreateUserDto dto) {
 		
@@ -42,7 +45,8 @@ public class UserController {
 		var userFromDb = userRepository.findByUserName(dto.username());
 		
 		if(userFromDb.isPresent()) {
-			throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY);
+			//Caso tente criar um usuario que ja exista, é lançado esta exceção	
+			throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY); 
 		}
 		
 		var user = new User();
@@ -53,6 +57,13 @@ public class UserController {
 		
 		
 		return ResponseEntity.ok().build();
+	}
+	
+	@GetMapping("/users")
+	@PreAuthorize("hasAuthority('SCOPE_admin')") 
+	public ResponseEntity<List<User>> listUsers(){
+		var users = userRepository.findAll();
+		return ResponseEntity.ok(users);
 	}
 	
 }
